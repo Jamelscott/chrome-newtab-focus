@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab</title>
+    <link rel="stylesheet" href="newtab.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="card">
+        <h1 class="logo">
+          <span class="logo-dot"></span>
+          Focus Tab
+        </h1>
+        <p class="subtitle">Where would you like to go?</p>
+
+        <form class="url-form" id="urlForm" autocomplete="off">
+          <div class="input-group">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <input
+              type="url"
+              id="urlInput"
+              class="url-input"
+              placeholder="https://example.com"
+              spellcheck="false"
+            />
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label-group">
+              <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              <div>
+                <span class="toggle-label">Focus URL bar on new tab</span>
+                <span class="toggle-description" id="toggleDescription">Browser address bar will be focused</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="toggle-btn"
+              id="focusToggle"
+              role="switch"
+              aria-checked="true"
+              aria-label="Toggle URL bar focus"
+            >
+              <span class="toggle-thumb"></span>
+            </button>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span>Go</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="newtab.js"></script>
+  </body>
+</html>
