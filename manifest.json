@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "New Tab Focus",
+  "name": "Nu Tab",
   "short_name": "Nu Tab",
   "version": "1.0.0",
   "description": "A custom new tab page with a clock, favourites grid, live weather, sticky notes, and an autofocused URL search bar.",

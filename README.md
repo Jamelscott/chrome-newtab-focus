@@ -1,4 +1,4 @@
-# Nu Tab — New Tab Focus
+# Nu Tab — Nu Tab
 
 A Chrome extension that replaces the new tab page with a clean, minimal dashboard — with the URL bar autofocused so you can start typing immediately.
 
