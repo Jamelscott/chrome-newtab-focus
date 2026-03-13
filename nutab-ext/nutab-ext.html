@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab Focus — Settings</title>
+    <link rel="stylesheet" href="nutab-ext.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="card">
+        <div id="unsaved-badge" aria-live="polite">
+          <span class="unsaved-dot"></span>
+          Unsaved changes
+        </div>
+
+        <h1 class="logo">
+          <span class="logo-dot"></span>
+          Nu Tab
+        </h1>
+        <p class="subtitle">
+          Clock, favourites, weather & sticky notes — all yours
+        </p>
+
+        <form id="settingsForm" autocomplete="off">
+          <!-- ── Section: Clock ───────────────────────────── -->
+          <div class="section-title">Clock</div>
+
+          <div class="field-row">
+            <label class="field-label" for="clockFormat">Time format</label>
+            <select class="field-select" id="clockFormat">
+              <option value="24">24-hour</option>
+              <option value="12">12-hour (AM/PM)</option>
+            </select>
+          </div>
+
+          <!-- ── Section: Favourites ──────────────────────── -->
+          <div class="section-title">Favourites</div>
+          <p class="section-hint">
+            Up to 12 shortcut tiles shown on the new tab page
+          </p>
+
+          <div class="fav-editor" id="favEditor">
+            <!-- rows injected by JS -->
+          </div>
+
+          <!-- ── Section: Weather ─────────────────────────── -->
+          <div class="section-title">Weather</div>
+
+          <div class="field-row">
+            <label class="field-label">Number of locations</label>
+            <div class="seg-control">
+              <button
+                type="button"
+                class="seg-btn"
+                data-val="1"
+                id="weatherCount1"
+              >
+                1
+              </button>
+              <button
+                type="button"
+                class="seg-btn"
+                data-val="2"
+                id="weatherCount2"
+              >
+                2
+              </button>
+            </div>
+          </div>
+
+          <div class="weather-locations" id="weatherLocations">
+            <!-- location rows injected by JS -->
+          </div>
+
+          <!-- ── Save ─────────────────────────────────────── -->
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span id="submitLabel">Save settings</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+              />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="nutab-ext.js"></script>
+  </body>
+</html>

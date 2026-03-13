@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Nu Tab</title>
+    <link rel="stylesheet" href="nutab-page.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- Clock -->
+      <div class="clock-section">
+        <div class="clock-time">
+          <span id="clock-h">00</span><span class="colon">:</span
+          ><span id="clock-m">00</span>
+        </div>
+        <div id="clock-date" class="clock-date">Monday, January 1</div>
+      </div>
+
+      <!-- URL bar -->
+      <form class="url-bar-form" id="url-bar-form" autocomplete="off">
+        <div class="url-bar-wrap">
+          <svg
+            class="url-bar-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input
+            id="url-bar-input"
+            class="url-bar-input"
+            type="text"
+            placeholder="Search or enter address"
+            spellcheck="false"
+            autocomplete="off"
+          />
+          <ul id="url-suggestions" class="url-suggestions" hidden></ul>
+        </div>
+      </form>
+
+      <!-- Favourites -->
+      <div class="fav-section">
+        <div class="fav-grid" id="fav-grid"></div>
+      </div>
+
+      <!-- Setup banner (hidden until no config found) -->
+      <div id="setup-banner">
+        <span class="banner-icon">⚙️</span>
+        <span
+          ><strong>First time?</strong> Click the extension icon in your toolbar
+          to configure your new tab page.</span
+        >
+      </div>
+
+      <!-- Weather -->
+      <div class="weather-section" id="weather-section"></div>
+    </div>
+    <button id="add-note-btn" title="Add sticky note">+</button>
+    <script src="nutab-page.js"></script>
+  </body>
+</html>

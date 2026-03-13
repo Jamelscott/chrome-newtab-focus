@@ -1,0 +1,615 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0d0d12;
+  --surface: #16161f;
+  --surface-alt: #1e1e2a;
+  --border: #2a2a3a;
+  --border-focus: #5b5bf6;
+  --accent: #5b5bf6;
+  --text-primary: #eeeef5;
+  --text-secondary: #8888a8;
+  --text-muted: #55556a;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  transition: background 4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--text-primary);
+}
+
+.page {
+  width: 100%;
+  max-width: 780px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ── Clock ──────────────────────────────────────────── */
+.clock-section {
+  text-align: center;
+}
+
+.clock-time {
+  font-size: 7.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.1em;
+}
+
+.clock-period {
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+  padding-bottom: 0.12em;
+  color: var(--text-secondary);
+}
+
+/* ── URL bar ──────────────────────────────────── */
+.url-bar-form {
+  width: 100%;
+}
+
+.url-bar-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.url-bar-wrap:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(91, 91, 246, 0.15);
+}
+
+.url-bar-icon {
+  position: absolute;
+  left: 14px;
+  width: 15px;
+  height: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.url-bar-wrap:focus-within .url-bar-icon {
+  color: var(--accent);
+}
+
+.url-bar-input {
+  width: 100%;
+  padding: 13px 16px 13px 40px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-family: inherit;
+}
+
+.url-bar-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── URL suggestions dropdown ───────────────────────── */
+.url-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-focus);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 200;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.url-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: calc(var(--radius-md) - 2px);
+  cursor: pointer;
+  transition: background 0.1s ease;
+  min-width: 0;
+}
+
+.url-suggestion-item:hover,
+.url-suggestion-item.is-active {
+  background: rgba(91, 91, 246, 0.15);
+}
+
+.url-suggestion-favicon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  object-fit: contain;
+}
+
+.url-suggestion-favicon-placeholder {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.url-suggestion-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.url-suggestion-title {
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.url-suggestion-url {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Favourites ─────────────────────────────────────── */
+.fav-section {
+  width: 100%;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 10px;
+}
+
+.fav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  text-align: center;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+  cursor: pointer;
+}
+
+.fav-item:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.fav-favicon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.fav-fallback {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.fav-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.fav-hotkey {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+/* ── Weather ─────────────────────────────────────────── */
+.weather-section {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.weather-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+  max-height: 72px;
+  transition: max-height 0.75s ease;
+}
+
+.weather-days {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.weather-day-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.weather-city {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.weather-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.weather-temp {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.weather-desc {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.weather-meta {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.weather-placeholder {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin: auto 0;
+}
+
+/* ── Setup banner ────────────────────────────────────── */
+#setup-banner {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: rgba(91, 91, 246, 0.1);
+  border: 1px solid rgba(91, 91, 246, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+#setup-banner strong {
+  color: var(--text-primary);
+}
+
+#setup-banner .banner-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ── Sticky Notes ────────────────────────────────────── */
+.sticky-note {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  min-width: 140px;
+  min-height: 100px;
+  overflow: hidden;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.sticky-note:hover {
+  border-color: rgba(91, 91, 246, 0.4);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.sticky-note.is-dragging {
+  border-color: var(--accent);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.65),
+    0 0 0 2px rgba(91, 91, 246, 0.25);
+  opacity: 0.96;
+  user-select: none;
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 8px 6px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.note-drag-handle {
+  cursor: grab;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 2px 3px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  user-select: none;
+  transition: color 0.15s ease;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.note-drag-handle:hover {
+  color: var(--text-secondary);
+}
+
+.note-drag-handle:active {
+  cursor: grabbing;
+}
+
+.note-title {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0;
+  min-width: 0;
+}
+
+.note-title::placeholder {
+  color: var(--text-muted);
+}
+
+.note-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.note-delete:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.note-colors {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.note-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease,
+    width 0.2s ease,
+    margin 0.2s ease;
+}
+
+/* hide non-active swatches by default */
+.note-swatch:not(.active) {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+
+/* show all when .open */
+.note-colors.open .note-swatch:not(.active) {
+  width: 11px;
+  opacity: 1;
+  pointer-events: auto;
+  margin: 0;
+}
+
+.note-swatch:hover {
+  transform: scale(1.3);
+}
+
+.note-swatch.active {
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: scale(1.25);
+}
+
+.note-body {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: inherit;
+  padding: 10px 11px;
+  resize: none;
+  line-height: 1.55;
+}
+
+.note-body::placeholder {
+  color: var(--text-muted);
+}
+
+.note-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    var(--border) 40%,
+    var(--border) 50%,
+    transparent 50%,
+    transparent 65%,
+    var(--border) 65%,
+    var(--border) 75%,
+    transparent 75%
+  );
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ── Add Note button ─────────────────────────────────── */
+#add-note-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 1.35rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+#add-note-btn:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(91, 91, 246, 0.45);
+}
+
+#add-note-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

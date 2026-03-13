@@ -1,0 +1,406 @@
+/* ── Reset & base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0d0d12;
+  --surface: #16161f;
+  --surface-alt: #1e1e2a;
+  --border: #2a2a3a;
+  --border-focus: #5b5bf6;
+  --accent: #5b5bf6;
+  --accent-hover: #7070f8;
+  --text-primary: #eeeef5;
+  --text-secondary: #8888a8;
+  --text-muted: #55556a;
+  --green: #22c55e;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --transition: 0.2s ease;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Page layout ──────────────────────────────────────────── */
+.page {
+  width: 500px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(91, 91, 246, 0.12) 0%,
+      transparent 70%
+    ),
+    var(--bg);
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.card {
+  position: relative;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px 36px;
+  box-shadow: var(--shadow);
+}
+
+/* ── Unsaved-changes badge ────────────────────────────────── */
+#unsaved-badge {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px 4px 8px;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+#unsaved-badge.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.unsaved-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+
+/* ── Logo / heading ───────────────────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  flex-shrink: 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+/* ── Submit button ────────────────────────────────────────── */
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.submit-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.submit-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 20px rgba(91, 91, 246, 0.4);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Saved state ─────────────────────────────────────────── */
+.submit-btn--saved,
+.submit-btn--saved:hover {
+  background: var(--green);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* ── Disabled submit ──────────────────────────────────────── */
+.submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Settings sections ────────────────────────────────────── */
+.section-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 28px 0 10px;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+.section-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: -6px 0 10px;
+}
+
+/* ── Field row ────────────────────────────────────────────── */
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.field-select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  padding: 6px 10px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.field-select:focus {
+  border-color: var(--border-focus);
+}
+
+/* ── Generic text input ───────────────────────────────────── */
+.field-input {
+  flex: 1;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  padding: 8px 10px;
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+  min-width: 0;
+}
+
+.field-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(91, 91, 246, 0.18);
+}
+
+.field-input::placeholder {
+  color: var(--text-muted);
+}
+
+.field-input--sm {
+  flex: 0 0 80px;
+}
+
+/* ── Favourites editor ────────────────────────────────────── */
+.fav-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.fav-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fav-row-num {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.fav-label-input {
+  flex: 0 0 90px;
+}
+.fav-url-input {
+  flex: 1;
+}
+
+.fav-delete-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.fav-delete-btn:hover {
+  background: rgba(244, 63, 94, 0.1);
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+.fav-add-btn {
+  align-self: flex-start;
+  margin-top: 2px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.fav-add-btn:hover {
+  background: rgba(91, 91, 246, 0.08);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Weather location rows ────────────────────────────────── */
+.weather-locations {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.weather-loc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loc-lookup-link {
+  font-size: 0.875rem;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity var(--transition);
+  flex-shrink: 0;
+}
+
+.loc-lookup-link:hover {
+  opacity: 1;
+}
+
+/* ── Segmented control ────────────────────────────────────── */
+.seg-control {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.seg-btn {
+  flex: 1;
+  padding: 6px 18px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.seg-btn + .seg-btn {
+  border-left: 1px solid var(--border);
+}
+
+.seg-btn--active {
+  background: var(--accent);
+  color: #fff;
+}
