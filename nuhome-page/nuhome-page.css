@@ -125,6 +125,12 @@ body {
   color: var(--text-muted);
 }
 
+/* Ghost completion highlight */
+.url-bar-input::selection {
+  background: rgba(91, 91, 246, 0.35);
+  color: var(--text-muted);
+}
+
 /* ── URL suggestions dropdown ───────────────────────── */
 .url-suggestions {
   position: absolute;
@@ -276,6 +282,86 @@ body {
   letter-spacing: 0.05em;
   font-variant-numeric: tabular-nums;
   user-select: none;
+}
+
+/* ── Add favourite button ────────────────────────────── */
+.fav-add {
+  opacity: 0.3;
+  border-style: dashed;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.fav-add:hover {
+  opacity: 1;
+}
+
+.fav-add-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text-muted);
+}
+
+.fav-add:hover .fav-add-icon {
+  color: var(--text-primary);
+}
+
+/* ── Inline add form ─────────────────────────────────── */
+.fav-add-form {
+  cursor: default;
+  gap: 5px;
+  padding: 8px 7px;
+  justify-content: center;
+  opacity: 1;
+  border-style: solid;
+  border-color: var(--accent);
+}
+
+.fav-add-form:hover {
+  transform: none;
+}
+
+.fav-add-url,
+.fav-add-label {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 0.65rem;
+  font-family: inherit;
+  padding: 3px 5px;
+  outline: none;
+  min-width: 0;
+}
+
+.fav-add-url:focus,
+.fav-add-label:focus {
+  border-color: var(--accent);
+}
+
+.fav-add-confirm {
+  background: var(--accent);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 1px;
+  transition: opacity 0.15s ease;
+}
+
+.fav-add-confirm:hover {
+  opacity: 0.85;
 }
 
 /* ── Weather ─────────────────────────────────────────── */
@@ -553,6 +639,119 @@ body {
   color: var(--text-muted);
 }
 
+/* ── Note markdown preview ──────────────────────────────── */
+.note-body-preview {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 11px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.55;
+  cursor: text;
+  word-break: break-word;
+  scrollbar-width: thin;
+}
+
+.note-body-preview h1,
+.note-body-preview h2,
+.note-body-preview h3,
+.note-body-preview h4,
+.note-body-preview h5,
+.note-body-preview h6 {
+  color: var(--text-primary);
+  margin: 6px 0 3px;
+  line-height: 1.3;
+}
+
+.note-body-preview h1 {
+  font-size: 1.1em;
+}
+.note-body-preview h2 {
+  font-size: 1em;
+}
+.note-body-preview h3,
+.note-body-preview h4,
+.note-body-preview h5,
+.note-body-preview h6 {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.note-body-preview p {
+  margin: 0 0 4px;
+}
+
+.note-body-preview p:last-child {
+  margin-bottom: 0;
+}
+
+.note-body-preview ul,
+.note-body-preview ol {
+  padding-left: 16px;
+  margin: 0 0 4px;
+}
+
+.note-body-preview li {
+  margin-bottom: 2px;
+}
+
+.note-body-preview code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.88em;
+}
+
+.note-body-preview pre {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 4px 0;
+}
+
+.note-body-preview pre code {
+  background: none;
+  padding: 0;
+}
+
+.note-body-preview blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 8px;
+  color: var(--text-muted);
+  margin: 4px 0;
+}
+
+.note-body-preview hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 6px 0;
+}
+
+.note-body-preview a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.note-body-preview a:hover {
+  text-decoration: underline;
+}
+
+.note-body-preview strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.note-body-preview em {
+  font-style: italic;
+}
+
+.note-body-preview del {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
 .note-resize {
   position: absolute;
   bottom: 0;
@@ -575,11 +774,18 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Add Note button ─────────────────────────────────── */
-#add-note-btn {
+/* ── Note control buttons ───────────────────────────────── */
+#note-controls {
   position: fixed;
   bottom: 28px;
   right: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 200;
+}
+
+#note-controls button {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -591,7 +797,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 200;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   transition:
     background 0.15s ease,
@@ -601,7 +806,7 @@ body {
     box-shadow 0.15s ease;
 }
 
-#add-note-btn:hover:not(:disabled) {
+#note-controls button:hover:not(:disabled) {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
@@ -609,7 +814,13 @@ body {
   box-shadow: 0 6px 24px rgba(91, 91, 246, 0.45);
 }
 
-#add-note-btn:disabled {
+#note-controls button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+#arrange-notes-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

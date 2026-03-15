@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Nu Tab",
-  "short_name": "Nu Tab",
+  "name": "Nu Home",
+  "short_name": "Nu Home",
   "version": "1.0.0",
-  "description": "A custom new tab page with a clock, favourites grid, live weather, sticky notes, and an autofocused URL search bar.",
+  "description": "A custom new tab page with a clock, favourites grid, live weather, sticky notes, and an autofocused URL search bar. — Nu Home",
   "minimum_chrome_version": "88",
   "action": {
-    "default_popup": "nutab-ext/nutab-ext.html",
+    "default_popup": "nuhome-ext/nuhome-ext.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -20,10 +20,10 @@
     "128": "icons/icon128.png"
   },
   "chrome_url_overrides": {
-    "newtab": "nutab-relay/nutab-relay.html"
+    "newtab": "nuhome-relay/nuhome-relay.html"
   },
   "options_ui": {
-    "page": "nutab-ext/nutab-ext.html",
+    "page": "nuhome-ext/nuhome-ext.html",
     "open_in_tab": true
   }
 }

@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Nu Tab</title>
-    <link rel="stylesheet" href="nutab-page.css" />
+    <title>Nu Home</title>
+    <link rel="stylesheet" href="nuhome-page.css" />
   </head>
   <body>
     <div class="page">
@@ -61,7 +61,27 @@
       <!-- Weather -->
       <div class="weather-section" id="weather-section"></div>
     </div>
-    <button id="add-note-btn" title="Add sticky note">+</button>
-    <script src="nutab-page.js"></script>
+    <div id="note-controls">
+      <button id="arrange-notes-btn" title="Auto-arrange notes">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+      </button>
+      <button id="add-note-btn" title="Add sticky note">+</button>
+    </div>
+    <script type="module" src="nuhome-page.js"></script>
   </body>
 </html>

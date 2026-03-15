@@ -1,10 +1,10 @@
-# Privacy Policy — Nu Tab
+# Privacy Policy — Nu Home
 
 **Last updated: March 13, 2026**
 
 ## Overview
 
-Nu Tab is a Chrome browser extension that replaces your new tab page with a personal dashboard featuring a clock, favourite links, live weather, sticky notes, and a URL search bar.
+Nu Home is a Chrome browser extension that replaces your new tab page with a personal dashboard featuring a clock, favourite links, live weather, sticky notes, and a URL search bar.
 
 We are committed to your privacy. This policy explains exactly what data is accessed, how it is used, and what is never done with it.
 
