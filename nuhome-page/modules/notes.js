@@ -152,7 +152,31 @@ function createNoteEl(note) {
     saveNotes();
     enterViewMode();
   });
-  mdPreview.addEventListener("click", () => {
+  mdPreview.addEventListener("click", (e) => {
+    if (e.target.classList.contains("md-checkbox")) {
+      // Toggle the corresponding - [ ] / - [x] line in the raw markdown
+      const checkboxes = Array.from(mdPreview.querySelectorAll(".md-checkbox"));
+      const idx = checkboxes.indexOf(e.target);
+      const lines = note.description.split("\n");
+      let count = 0;
+      for (let i = 0; i < lines.length; i++) {
+        if (/^(?:[-*+]\s+)?\[[ xX]\]/.test(lines[i])) {
+          if (count === idx) {
+            lines[i] = e.target.checked
+              ? lines[i].replace(/\[ \]/, "[x]")
+              : lines[i].replace(/\[[xX]\]/, "[ ]");
+            break;
+          }
+          count++;
+        }
+      }
+      note.description = lines.join("\n");
+      noteTextarea.value = note.description;
+      saveNotes();
+      // Re-render to reflect change without switching to edit mode
+      enterViewMode();
+      return;
+    }
     enterEditMode();
     noteTextarea.focus();
   });

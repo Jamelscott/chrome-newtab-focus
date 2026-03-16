@@ -1,10 +1,10 @@
 # Privacy Policy — Nu Home
 
-**Last updated: March 13, 2026**
+**Last updated: March 15, 2026**
 
 ## Overview
 
-Nu Home is a Chrome browser extension that replaces your new tab page with a personal dashboard featuring a clock, favourite links, live weather, sticky notes, and a URL search bar.
+Nu Home is a Chrome browser extension that replaces your new tab page with a personal dashboard featuring a flip-clock, URL search bar with autocomplete, favourite link tiles, live weather forecasts, and persistent sticky notes with Markdown support.
 
 We are committed to your privacy. This policy explains exactly what data is accessed, how it is used, and what is never done with it.
 
@@ -26,7 +26,7 @@ We are committed to your privacy. This policy explains exactly what data is acce
 
 ### Extension Storage (`storage` permission)
 
-- **What:** Your extension settings (clock format, favourite links, weather locations) and sticky note content.
+- **What:** Your extension settings and sticky note content. Specifically: clock format preference, favourite link URLs and labels, weather location names and coordinates, and the text content, position, size, and colour of your sticky notes.
 - **Why:** To persist your configuration and notes across new tab sessions.
 - **How:** All data is stored locally on your device using `chrome.storage.local`. It never leaves your browser.
 
@@ -44,12 +44,12 @@ We are committed to your privacy. This policy explains exactly what data is acce
 
 ## Third-Party Services
 
-| Service                                                      | Purpose                              | Data sent                                         |
-| ------------------------------------------------------------ | ------------------------------------ | ------------------------------------------------- |
-| [Open-Meteo](https://open-meteo.com)                         | Live weather data                    | Latitude & longitude of your configured locations |
-| [Google Favicon Service](https://www.google.com/s2/favicons) | Site icons in favourites and URL bar | Domain name of the site whose icon is requested   |
+| Service                                                      | Purpose                              | Data sent                                                 |
+| ------------------------------------------------------------ | ------------------------------------ | --------------------------------------------------------- |
+| [Open-Meteo](https://open-meteo.com)                         | Live weather data                    | Latitude & longitude of your configured locations only    |
+| [Google Favicon Service](https://www.google.com/s2/favicons) | Site icons in favourites and URL bar | The domain name of the site whose icon is being requested |
 
-Both are read-only requests. No personal identifiers are included.
+Both services receive only the minimum data needed to fulfil the request. No account, API key, or personal identifier is sent. Neither service is provided with your browsing history, IP address beyond what is inherent in any HTTP request, or any other personal data.
 
 ---
 

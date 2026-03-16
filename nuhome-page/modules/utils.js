@@ -96,6 +96,23 @@ export function renderMarkdown(text) {
       continue;
     }
 
+    const cbm = line.match(/^(?:[-*+]\s+)?\[([ xX])\]\s*(.*)/);
+    if (cbm) {
+      if (inList === "ol") {
+        out.push("</ol>");
+        inList = null;
+      }
+      if (!inList) {
+        out.push(`<ul class="md-tasklist">`);
+        inList = "ul";
+      }
+      const checked = cbm[1].toLowerCase() === "x";
+      out.push(
+        `<li class="md-task"><input type="checkbox" class="md-checkbox"${checked ? " checked" : ""}> ${inline(cbm[2])}</li>`,
+      );
+      continue;
+    }
+
     const ulm = line.match(/^[-*+]\s+(.*)/);
     if (ulm) {
       if (inList === "ol") {

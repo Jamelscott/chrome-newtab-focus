@@ -162,7 +162,7 @@ export function initUrlBar() {
 
   urlBarInput.addEventListener("input", () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => queryAndRender(urlBarInput.value), 150);
+    debounceTimer = setTimeout(() => queryAndRender(urlBarInput.value), 50);
   });
 
   urlBarInput.addEventListener("keydown", (e) => {

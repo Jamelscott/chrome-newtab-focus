@@ -1,6 +1,7 @@
 const clockH = document.getElementById("clock-h");
 const clockM = document.getElementById("clock-m");
 const clockDate = document.getElementById("clock-date");
+const clockPeriod = document.getElementById("clock-period");
 
 const DAYS = [
   "Sunday",
@@ -63,6 +64,67 @@ function updateGradient() {
   ].join(", ");
 }
 
+// ── Flip digit ────────────────────────────────────────
+
+function createFlipDigit(initVal = "0") {
+  const wrap = document.createElement("div");
+  wrap.className = "flip-digit";
+  wrap.innerHTML = [
+    `<div class="fd-up">`,
+    `  <div class="fd-face fd-static-up"><span>${initVal}</span></div>`,
+    `  <div class="fd-face fd-fold-up"><span>${initVal}</span></div>`,
+    `</div>`,
+    `<div class="fd-dn">`,
+    `  <div class="fd-face fd-static-dn"><span>${initVal}</span></div>`,
+    `  <div class="fd-face fd-fold-dn"><span>${initVal}</span></div>`,
+    `</div>`,
+    `<div class="fd-line"></div>`,
+  ].join("");
+  wrap._val = initVal;
+  wrap._timer = null;
+  return wrap;
+}
+
+function setFlipDigit(wrap, newVal) {
+  if (wrap._val === newVal) return;
+  const oldVal = wrap._val;
+  wrap._val = newVal;
+
+  // Static panels immediately show the new value
+  // (they are hidden behind the fold panels during the animation)
+  wrap.querySelector(".fd-static-up span").textContent = newVal;
+  wrap.querySelector(".fd-static-dn span").textContent = newVal;
+
+  // Fold panels: upper carries the old digit (folds away),
+  // lower carries the new digit (folds in from behind)
+  wrap.querySelector(".fd-fold-up span").textContent = oldVal;
+  wrap.querySelector(".fd-fold-dn span").textContent = newVal;
+
+  // (Re)trigger animation — remove first so it restarts on rapid changes
+  if (wrap._timer) clearTimeout(wrap._timer);
+  wrap.classList.remove("flipping");
+  void wrap.offsetWidth; // force reflow to restart CSS animation
+  wrap.classList.add("flipping");
+  wrap._timer = setTimeout(() => wrap.classList.remove("flipping"), 500);
+}
+
+const digits = {};
+
+function initDigits() {
+  [
+    { id: "h0", parent: clockH },
+    { id: "h1", parent: clockH },
+    { id: "m0", parent: clockM },
+    { id: "m1", parent: clockM },
+  ].forEach(({ id, parent }) => {
+    const el = createFlipDigit("0");
+    digits[id] = el;
+    parent.appendChild(el);
+  });
+}
+
+// ── Tick ─────────────────────────────────────────────
+
 function tickClock(fmt) {
   const now = new Date();
   let h = now.getHours();
@@ -72,14 +134,22 @@ function tickClock(fmt) {
     suffix = h >= 12 ? " pm" : " am";
     h = h % 12 || 12;
   }
-  clockH.textContent = String(h).padStart(2, "0");
-  clockM.innerHTML =
-    m + (suffix ? `<span class="clock-period">${suffix}</span>` : "");
+  const hStr = String(h);
+
+  // Hide the leading digit tile when hour is single-digit
+  digits.h0.style.display = hStr.length === 1 ? "none" : "inline-block";
+  if (hStr.length === 2) setFlipDigit(digits.h0, hStr[0]);
+  setFlipDigit(digits.h1, hStr.length === 1 ? hStr[0] : hStr[1]);
+  setFlipDigit(digits.m0, m[0]);
+  setFlipDigit(digits.m1, m[1]);
+
+  if (clockPeriod) clockPeriod.textContent = suffix;
   clockDate.textContent = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()}`;
   updateGradient();
 }
 
 export function initClock(fmt) {
+  initDigits();
   tickClock(fmt);
   setInterval(() => tickClock(fmt), 1000);
 }
