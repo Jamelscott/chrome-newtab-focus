@@ -18,7 +18,9 @@ function navigateInput(val) {
   } else if (/^[^\s]+\.[^\s]{2,}$/.test(val)) {
     navigate("https://" + val);
   } else {
-    navigate("https://www.google.com/search?q=" + encodeURIComponent(val));
+    // Use the Chrome Search API so the user's default search engine is respected.
+    // This is required for Chrome Web Store compliance (Red Argon violation).
+    chrome.search.query({ text: val, disposition: "CURRENT_TAB" });
   }
 }
 
@@ -33,7 +35,6 @@ export function initUrlBar() {
   const urlBarInput = document.getElementById("url-bar-input");
   const suggestions = document.getElementById("url-suggestions");
   let topSitesCache = [];
-  let debounceTimer = null;
   let activeIdx = -1;
 
   if (typeof chrome !== "undefined" && chrome.topSites) {
@@ -99,12 +100,33 @@ export function initUrlBar() {
     if (urlBarInput.value !== typed) return;
     if (!items.length || !typed) return;
     const lower = typed.toLowerCase();
-    for (const item of items) {
-      const url = item.url;
-      const candidates = [
-        url.replace(/^https?:\/\/www\./, ""),
-        url.replace(/^https?:\/\//, ""),
+
+    function completionCandidates(rawUrl) {
+      const list = [
+        rawUrl.replace(/^https?:\/\/www\./i, ""),
+        rawUrl.replace(/^https?:\/\//i, ""),
       ];
+
+      try {
+        const { hostname, pathname, search, hash } = new URL(rawUrl);
+        const host = hostname.replace(/^www\./i, "");
+        const hostWithRest = `${host}${pathname}${search}${hash}`;
+        list.push(hostWithRest, host);
+
+        // Also allow matches on parent domains (mail.google.com -> google.com)
+        const parts = host.split(".");
+        for (let i = 1; i < parts.length - 1; i++) {
+          list.push(parts.slice(i).join("."));
+        }
+      } catch {
+        // Ignore invalid URLs and use the basic string candidates above.
+      }
+
+      return [...new Set(list.filter(Boolean))];
+    }
+
+    for (const item of items) {
+      const candidates = completionCandidates(item.url);
       for (const candidate of candidates) {
         if (candidate.toLowerCase().startsWith(lower)) {
           const completed = typed + candidate.slice(lower.length);
@@ -126,6 +148,62 @@ export function initUrlBar() {
     activeIdx = idx;
   }
 
+  function isSearchResultsPage(url) {
+    // Filter out search engine result pages (Google, Bing, DuckDuckGo, etc.)
+    const searchPatterns = /\/(search|results|s)\?|[?&]q=|[?&]query=/i;
+    return searchPatterns.test(url);
+  }
+
+  function hostAndPath(rawUrl) {
+    try {
+      const u = new URL(rawUrl);
+      const host = u.hostname.replace(/^www\./i, "").toLowerCase();
+      const path = `${u.pathname}${u.search}${u.hash}`.toLowerCase();
+      return { host, path };
+    } catch {
+      return { host: "", path: "" };
+    }
+  }
+
+  function frecency(item) {
+    const visits = item.visitCount || 0;
+    const typed = item.typedCount || 0;
+    const ageMs = Date.now() - (item.lastVisitTime || 0);
+    const ageDays = ageMs / 86_400_000;
+    const recency = 1 / (1 + ageDays);
+
+    // Typed visits should heavily influence ranking (closer to omnibox behavior)
+    return Math.log1p(visits) * 4 + typed * 12 + recency * 6;
+  }
+
+  function scoreSuggestion(item, query) {
+    const q = query.toLowerCase();
+    const title = (item.title || "").toLowerCase();
+    const url = (item.url || "").toLowerCase();
+    const { host, path } = hostAndPath(item.url || "");
+
+    let score = frecency(item);
+
+    // Host/domain intent should dominate for short inputs (g -> gmail.com)
+    if (host === q) score += 500;
+    if (host.startsWith(q)) score += 300;
+    if (host.includes(q)) score += 60;
+
+    // Boost token-prefix inside host (mail.google.com should boost for g/google)
+    const hostTokens = host.split(/[.-]/).filter(Boolean);
+    if (hostTokens.some((t) => t.startsWith(q))) score += 140;
+
+    // Title relevance helps, but should not outrank host-prefix intent
+    if (title.startsWith(q)) score += 40;
+    else if (title.includes(q)) score += 15;
+
+    // URL/path relevance is weaker than host relevance
+    if (path.startsWith(`/${q}`)) score += 20;
+    else if (url.includes(q)) score += 8;
+
+    return score;
+  }
+
   function queryAndRender(val) {
     const trimmed = val.trim().toLowerCase();
     if (!trimmed) {
@@ -139,30 +217,27 @@ export function initUrlBar() {
         (s.title || "").toLowerCase().includes(trimmed),
     );
 
-    if (typeof chrome !== "undefined" && chrome.history) {
-      chrome.history.search({ text: trimmed, maxResults: 8 }, (histItems) => {
-        const seen = new Set();
-        const merged = [];
-        [...(histItems || []), ...topMatches].forEach((item) => {
-          if (!seen.has(item.url)) {
-            seen.add(item.url);
-            merged.push(item);
-          }
-        });
-        const results = merged.slice(0, 8);
-        renderSuggestions(results);
-        applyInlineCompletion(val, results);
+    chrome.history.search({ text: trimmed, maxResults: 100 }, (histItems) => {
+      const seen = new Set();
+      const merged = [];
+      [...(histItems || []), ...topMatches].forEach((item) => {
+        if (!seen.has(item.url) && !isSearchResultsPage(item.url)) {
+          seen.add(item.url);
+          merged.push(item);
+        }
       });
-    } else {
-      const results = topMatches.slice(0, 8);
+      const results = merged
+        .sort(
+          (a, b) => scoreSuggestion(b, trimmed) - scoreSuggestion(a, trimmed),
+        )
+        .slice(0, 8);
       renderSuggestions(results);
       applyInlineCompletion(val, results);
-    }
+    });
   }
 
   urlBarInput.addEventListener("input", () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => queryAndRender(urlBarInput.value), 50);
+    queryAndRender(urlBarInput.value);
   });
 
   urlBarInput.addEventListener("keydown", (e) => {
